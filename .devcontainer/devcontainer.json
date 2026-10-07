@@ -1,0 +1,50 @@
+{
+  // Configuração do ambiente de desenvolvimento no GitHub Codespaces.
+  // Ao criar um Codespace, o GitHub monta automaticamente um computador na nuvem
+  // com Java 21, Maven e Docker, além das extensões do VS Code listadas abaixo.
+  "name": "Projeto Final - SENAI",
+  "build": { "dockerfile": "Dockerfile" },
+
+  "features": {
+    // Instala o Maven (ferramenta que baixa as bibliotecas e executa o projeto)
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "none",
+      "installMaven": "true",
+      "installGradle": "false"
+    },
+    // Docker dentro do Codespace (usado na UC Implantação de Sistemas)
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "files.autoSave": "afterDelay"
+      }
+    },
+    "codespaces": {
+      "openFiles": ["README.md"]
+    }
+  },
+
+  // Porta da aplicação. Quando o sistema subir, o Codespaces avisa e oferece abrir no navegador.
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Sistema",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // Baixa as bibliotecas do projeto já na criação, para a primeira execução ser mais rápida.
+  "postCreateCommand": "mvn -q -B dependency:go-offline || true",
+
+  "hostRequirements": {
+    "cpus": 2
+  }
+}

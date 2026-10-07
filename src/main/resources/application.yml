@@ -1,0 +1,53 @@
+# =====================================================================
+#  CONFIGURAÇÕES DO SISTEMA (ambiente de DESENVOLVIMENTO)
+#
+#  Formato YAML: a hierarquia é feita pela INDENTAÇÃO (2 espaços).
+#  Nunca use TAB. "app: nome:" equivale a "app.nome".
+# =====================================================================
+
+app:
+  # Nome do seu sistema: aparece no menu e no título das páginas.
+  # TROQUE para o nome do seu projeto (ex.: "Estoque Fácil", "OS Técnica").
+  nome: "Meu Sistema"
+  seguranca:
+    # Segurança (login). Fica desligada até o Encontro 7.
+    ativa: false
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sistema
+
+  # -------------------------------------------------------------------
+  #  Banco de dados de DESENVOLVIMENTO: H2 (embutido, salvo na pasta ./dados)
+  #  MODE=MySQL deixa o H2 parecido com o MySQL, usado em produção.
+  # -------------------------------------------------------------------
+  datasource:
+    url: "jdbc:h2:file:./dados/banco;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+    username: sa
+    password: ""
+
+  jpa:
+    hibernate:
+      # O Hibernate cria/atualiza as tabelas a partir das classes @Entity.
+      ddl-auto: update
+    # true = mostra no terminal os comandos SQL executados (bom para aprender)
+    show-sql: false
+    open-in-view: true
+
+  # Console web do banco: abra /h2-console no navegador
+  #   JDBC URL: copie a mesma "url" do bloco datasource acima (completa)
+  #   Usuário: sa   Senha: (vazia)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        # Permite abrir o console pelo endereço do Codespaces (apenas desenvolvimento)
+        web-allow-others: true
+
+  # Sem cache: alterações nas páginas aparecem ao recarregar o navegador.
+  thymeleaf:
+    cache: false

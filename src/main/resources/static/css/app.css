@@ -1,0 +1,42 @@
+/* Estilos do projeto. A base visual vem do Bootstrap 5; aqui ficam só os ajustes. */
+
+:root {
+    --cor-principal: #1f4e79;   /* troque pela cor do seu sistema */
+    --cor-principal-escura: #163a5b;
+}
+
+body {
+    background: #f5f7f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main { flex: 1; }
+
+.bg-app { background: var(--cor-principal); }
+
+.btn-app {
+    background: var(--cor-principal);
+    border-color: var(--cor-principal);
+    color: #fff;
+}
+.btn-app:hover {
+    background: var(--cor-principal-escura);
+    border-color: var(--cor-principal-escura);
+    color: #fff;
+}
+
+/* Faixa de status da página inicial / diagnóstico */
+.status-faixa {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: 1rem 1.2rem;
+    border-radius: .5rem;
+    border: 1px solid;
+}
+.status-faixa i { font-size: 1.8rem; }
+.status-faixa strong { display: block; font-size: 1.1rem; }
+.status-faixa.ok { background: #e9f6ee; border-color: #b7dfc5; color: #1d5e37; }
+.status-faixa.atencao { background: #fff6e0; border-color: #f0d48a; color: #7a5300; }

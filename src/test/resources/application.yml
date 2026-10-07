@@ -1,0 +1,18 @@
+# Configuração usada SOMENTE nos testes automatizados:
+# banco H2 em memória, apagado ao final de cada execução de testes.
+app:
+  nome: "Sistema (testes)"
+  seguranca:
+    ativa: false
+
+spring:
+  datasource:
+    url: "jdbc:h2:mem:testes;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true

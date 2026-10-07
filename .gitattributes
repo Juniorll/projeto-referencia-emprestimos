@@ -1,0 +1,7 @@
+# Normaliza finais de linha entre Windows, Linux e macOS
+* text=auto
+*.sh text eol=lf
+*.java text eol=lf
+*.yml text eol=lf
+*.png binary
+*.jpg binary

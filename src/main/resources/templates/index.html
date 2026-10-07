@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Início')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-4">
+
+    <!-- Faixa de status: verde se tudo estiver OK, amarela se algo precisar de atenção -->
+    <div class="status-faixa" th:classappend="${tudoOk} ? 'ok' : 'atencao'">
+        <i class="bi" th:classappend="${tudoOk} ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+        <div>
+            <strong th:text="${tudoOk} ? 'Ambiente OK' : 'Ambiente com pendências'">Ambiente OK</strong>
+            <span th:text="${tudoOk} ? 'Seu projeto está rodando. Você está pronto para começar!' : 'Confira os itens marcados abaixo e consulte o manual (Problemas comuns).'">
+                Seu projeto está rodando.
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="bi bi-clipboard2-pulse me-1"></i> Diagnóstico do ambiente
+                </div>
+                <table class="table mb-0 align-middle">
+                    <tbody>
+                    <!-- th:each repete a linha para cada item da lista "itens" -->
+                    <tr th:each="item : ${itens}">
+                        <td class="text-muted" style="width: 42%" th:text="${item.nome}">Item</td>
+                        <td th:text="${item.valor}">Valor</td>
+                        <td class="text-end" style="width: 3rem">
+                            <i th:if="${item.ok}" class="bi bi-check-circle-fill text-success"></i>
+                            <i th:unless="${item.ok}" class="bi bi-x-circle-fill text-danger"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="bi bi-signpost-2 me-1"></i> Próximos passos
+                </div>
+                <div class="card-body">
+                    <ol class="mb-3">
+                        <li>Altere o <code>nome</code> do sistema em <code>application.yml</code>.</li>
+                        <li>Atualize o <code>README.md</code> com o seu nome e a opção escolhida.</li>
+                        <li>Faça o <em>commit</em> e envie (<em>push</em>) para o GitHub.</li>
+                    </ol>
+                    <a class="btn btn-outline-secondary btn-sm" th:href="@{/h2-console}" target="_blank">
+                        <i class="bi bi-database"></i> Abrir console do banco (H2)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

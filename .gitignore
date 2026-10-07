@@ -1,0 +1,27 @@
+# Arquivos gerados na compilação
+target/
+bin/
+out/
+
+# Banco de dados H2 de desenvolvimento (cada pessoa tem o seu)
+dados/
+*.mv.db
+*.trace.db
+
+# Configurações locais de IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+.vscode/*
+!.vscode/extensions.json
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos com senhas e variáveis locais (nunca enviar ao GitHub)
+.env
+*.log

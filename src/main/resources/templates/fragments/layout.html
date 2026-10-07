@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+    FRAGMENTOS DE LAYOUT
+    Partes que se repetem em todas as páginas (cabeçalho, menu e rodapé).
+    Cada página "importa" estes pedaços com th:replace, assim não repetimos código.
+-->
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Fragmento: <head> com título, Bootstrap e o CSS do projeto -->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' | ' + ${appNome}">Página | Sistema</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+
+<!-- Fragmento: menu superior -->
+<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-dark bg-app">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" th:href="@{/}">
+            <i class="bi bi-grid-3x3-gap-fill me-1"></i>
+            <span th:text="${appNome}">Meu Sistema</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Início</a></li>
+                <!-- Nos próximos encontros, acrescente aqui os links das páginas do seu sistema -->
+            </ul>
+            <!-- Aparece somente quando a segurança estiver ligada e houver alguém logado -->
+            <div class="d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
+                <span class="text-white-50 small">
+                    <i class="bi bi-person-circle"></i>
+                    <span sec:authentication="name">usuário</span>
+                </span>
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button class="btn btn-sm btn-outline-light" type="submit">Sair</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Fragmento: rodapé + JavaScript do Bootstrap -->
+<footer th:fragment="rodape" class="border-top mt-5 py-3 text-muted small">
+    <div class="container d-flex justify-content-between">
+        <span th:text="${appNome}">Meu Sistema</span>
+        <span>Projeto Final · Técnico em Desenvolvimento de Sistemas · SENAI</span>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</footer>
+
+</body>
+</html>

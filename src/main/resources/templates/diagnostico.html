@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Diagnóstico')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-4">
+    <h1 class="h4 mb-3">Diagnóstico do ambiente</h1>
+
+    <div class="status-faixa" th:classappend="${tudoOk} ? 'ok' : 'atencao'">
+        <i class="bi" th:classappend="${tudoOk} ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+        <div><strong th:text="${tudoOk} ? 'Ambiente OK' : 'Ambiente com pendências'">Ambiente OK</strong></div>
+    </div>
+
+    <div class="card shadow-sm mt-3">
+        <table class="table mb-0 align-middle">
+            <tbody>
+            <tr th:each="item : ${itens}">
+                <td class="text-muted" style="width: 42%" th:text="${item.nome}">Item</td>
+                <td th:text="${item.valor}">Valor</td>
+                <td class="text-end" style="width: 3rem">
+                    <i th:if="${item.ok}" class="bi bi-check-circle-fill text-success"></i>
+                    <i th:unless="${item.ok}" class="bi bi-x-circle-fill text-danger"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
