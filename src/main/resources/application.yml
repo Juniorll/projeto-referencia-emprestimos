@@ -8,7 +8,7 @@
 app:
   # Nome do seu sistema: aparece no menu e no título das páginas.
   # TROQUE para o nome do seu projeto (ex.: "Estoque Fácil", "OS Técnica").
-  nome: "Meu Sistema"
+  nome: "Controle de Empréstimos"
   seguranca:
     # Segurança (login). Fica desligada até o Encontro 7.
     ativa: false
