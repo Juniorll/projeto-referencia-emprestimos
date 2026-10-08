@@ -76,26 +76,23 @@ classDiagram
     class Categoria {
         Long id
         String nome
+    }
+    class Equipamento {
+        Long id
+        String patrimonio
         String descricao
+        String marca
+        LocalDate dataAquisicao
     }
-    class Produto {
+    class Emprestimo {
         Long id
-        String codigo
-        String nome
-        String unidade
-        BigDecimal precoCusto
-        Integer estoqueMinimo
-        Integer saldo
+        String solicitante
+        LocalDate dataRetirada
+        LocalDate dataPrevista
+        LocalDate dataDevolucao
     }
-    class Movimentacao {
-        Long id
-        String tipo
-        Integer quantidade
-        LocalDateTime dataHora
-        String observacao
-    }
-    Categoria "1" --> "*" Produto : classifica
-    Produto "1" --> "*" Movimentacao : registra
+    Categoria "1" --> "*" Equipamento : classifica
+    Equipamento "1" --> "*" Emprestimo : registra
 ```
 
 ---
