@@ -70,8 +70,33 @@ Formato: **Como** *[papel]*, **quero** *[ação]*, **para** *[benefício]*.
 
 ## 4. Modelo de dados
 
-<!-- Encontro 2: apague este comentário (as duas linhas) e cole aqui o diagrama de classes
-     em Mermaid (bloco que começa com ```mermaid), conforme o manual do Encontro 2. -->
+```mermaid
+classDiagram
+    direction LR
+    class Categoria {
+        Long id
+        String nome
+        String descricao
+    }
+    class Produto {
+        Long id
+        String codigo
+        String nome
+        String unidade
+        BigDecimal precoCusto
+        Integer estoqueMinimo
+        Integer saldo
+    }
+    class Movimentacao {
+        Long id
+        String tipo
+        Integer quantidade
+        LocalDateTime dataHora
+        String observacao
+    }
+    Categoria "1" --> "*" Produto : classifica
+    Produto "1" --> "*" Movimentacao : registra
+```
 
 ---
 
