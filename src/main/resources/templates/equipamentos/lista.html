@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Equipamentos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Equipamentos</h1>
+        <!-- ${#lists.size(...)} conta quantos itens a lista tem -->
+        <span class="badge text-bg-secondary" th:text="${#lists.size(equipamentos)} + ' registro(s)'">0 registro(s)</span>
+    </div>
+
+    <!-- Mensagem quando ainda não há registros -->
+    <div th:if="${#lists.isEmpty(equipamentos)}" class="alert alert-info">Nenhum registro cadastrado.</div>
+
+    <div class="card shadow-sm" th:unless="${#lists.isEmpty(equipamentos)}">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>Patrimônio</th>
+                    <th>Descrição</th>
+                    <th>Marca</th>
+                    <th>Aquisição</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- th:each repete a linha <tr> para cada item da lista "equipamentos" -->
+                <tr th:each="equipamento : ${equipamentos}">
+                    <td th:text="${equipamento.patrimonio}">Patrimônio</td>
+                    <td th:text="${equipamento.descricao}">Descrição</td>
+                    <td th:text="${equipamento.marca}">Marca</td>
+                    <td th:text="${#temporals.format(equipamento.dataAquisicao, 'dd/MM/yyyy')}">01/01/2026</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

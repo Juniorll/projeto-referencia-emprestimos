@@ -33,6 +33,8 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/}">Início</a></li>
                 <!-- Nos próximos encontros, acrescente aqui os links das páginas do seu sistema -->
+                <!-- Já adicionada a linha abaixo -->
+                <li class="nav-item"><a class="nav-link" th:href="@{/equipamentos}">Equipamentos</a></li>
             </ul>
             <!-- Aparece somente quando a segurança estiver ligada e houver alguém logado -->
             <div class="d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
