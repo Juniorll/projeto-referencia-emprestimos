@@ -2,18 +2,24 @@ package br.senai.sistema.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 /**
  * Entidade Equipamento: representa o equipamento que o sistema guarda.
  *
  * Cada objeto desta classe vira UMA LINHA da tabela "equipamentos" no banco.
- * Cada atributo vira UMA COLUNA dessa tabela.
+ * As anotações de validação (@NotBlank, @Size...) definem as regras dos campos do formulário.
  */
 @Entity
 @Table(name = "equipamentos")
@@ -24,22 +30,30 @@ public class Equipamento {
     private Long id;
 
     /** Número de patrimônio (não se repete). */
+    @NotBlank(message = "Campo obrigatório.")
+    @Size(max = 20, message = "Use no máximo 20 caracteres.")
     @Column(nullable = false, unique = true, length = 20)
     private String patrimonio;
 
     /** O que é o equipamento. */
+    @NotBlank(message = "Campo obrigatório.")
+    @Size(max = 100, message = "Use no máximo 100 caracteres.")
     @Column(nullable = false, length = 100)
     private String descricao;
 
     /** Fabricante. */
+    @Size(max = 50, message = "Use no máximo 50 caracteres.")
     @Column(length = 50)
     private String marca;
 
     /** Data de compra. */
+    @NotNull(message = "Campo obrigatório.")
+    @PastOrPresent(message = "A data não pode ser futura.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate dataAquisicao;
 
-    /** Construtor vazio: obrigatório para o JPA criar objetos ao ler do banco. */
+    /** Construtor vazio: obrigatório para o JPA e para o formulário criarem objetos. */
     public Equipamento() {
     }
 
@@ -51,7 +65,7 @@ public class Equipamento {
         this.dataAquisicao = dataAquisicao;
     }
 
-    // ---- Getters e setters: a forma de ler e alterar os atributos privados ----
+    // ---- Getters e setters ----
 
     public Long getId() {
         return id;
