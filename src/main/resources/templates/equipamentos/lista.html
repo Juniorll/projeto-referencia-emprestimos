@@ -42,6 +42,11 @@
                     <td th:text="${#temporals.format(equipamento.dataAquisicao, 'dd/MM/yyyy')}">01/01/2026</td>
                     <td class="text-end text-nowrap">
                         <a th:href="@{/equipamentos/{id}/editar(id=${equipamento.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                        <!-- Excluir usa um formulário POST; o confirm() pede confirmação antes de enviar -->
+                        <form th:action="@{/equipamentos/{id}/excluir(id=${equipamento.id})}" method="post" class="d-inline"
+                              onsubmit="return confirm('Confirma a exclusão deste registro?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Excluir</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

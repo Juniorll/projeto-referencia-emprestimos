@@ -69,4 +69,12 @@ public class EquipamentoController {
         model.addAttribute("equipamento", equipamentoService.buscarPorId(id));
         return "equipamentos/form";
     }
+
+    /** POST /equipamentos/5/excluir -> exclui o registro de id 5. */
+    @PostMapping("/{id}/excluir")
+    public String excluir(@PathVariable Long id, RedirectAttributes atributos) {
+        equipamentoService.excluir(id);
+        atributos.addFlashAttribute("mensagem", "Equipamento excluído com sucesso.");
+        return "redirect:/equipamentos";
+    }
 }
