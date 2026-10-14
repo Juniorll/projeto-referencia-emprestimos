@@ -6,13 +6,20 @@
 
 <main class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4 mb-0">Equipamentos</h1>
-        <!-- ${#lists.size(...)} conta quantos itens a lista tem -->
-        <span class="badge text-bg-secondary" th:text="${#lists.size(equipamentos)} + ' registro(s)'">0 registro(s)</span>
+        <h1 class="h4 mb-0">Equipamentos
+            <span class="badge text-bg-secondary align-middle" th:text="${#lists.size(equipamentos)} + ' registro(s)'">0 registro(s)</span>
+        </h1>
+        <a th:href="@{/equipamentos/novo}" class="btn btn-app"><i class="bi bi-plus-lg"></i> Novo equipamento</a>
+    </div>
+
+    <!-- Mensagem de sucesso enviada pelo controller (aparece uma vez, depois de salvar ou excluir) -->
+    <div th:if="${mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${mensagem}">Mensagem</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
 
     <!-- Mensagem quando ainda não há registros -->
-    <div th:if="${#lists.isEmpty(equipamentos)}" class="alert alert-info">Nenhum registro cadastrado.</div>
+    <div th:if="${#lists.isEmpty(equipamentos)}" class="alert alert-info">Nenhum registro encontrado.</div>
 
     <div class="card shadow-sm" th:unless="${#lists.isEmpty(equipamentos)}">
         <div class="table-responsive">
@@ -23,6 +30,7 @@
                     <th>Descrição</th>
                     <th>Marca</th>
                     <th>Aquisição</th>
+                    <th class="text-end">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,6 +40,9 @@
                     <td th:text="${equipamento.descricao}">Descrição</td>
                     <td th:text="${equipamento.marca}">Marca</td>
                     <td th:text="${#temporals.format(equipamento.dataAquisicao, 'dd/MM/yyyy')}">01/01/2026</td>
+                    <td class="text-end text-nowrap">
+                        <a th:href="@{/equipamentos/{id}/editar(id=${equipamento.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
