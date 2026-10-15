@@ -7,9 +7,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.senai.sistema.model.Equipamento;
+import br.senai.sistema.model.Categoria;
 import br.senai.sistema.model.Perfil;
 import br.senai.sistema.model.Usuario;
 import br.senai.sistema.repository.EquipamentoRepository;
+import br.senai.sistema.repository.CategoriaRepository;
 import br.senai.sistema.repository.UsuarioRepository;
 
 /**
@@ -22,12 +24,14 @@ public class DadosIniciais implements CommandLineRunner {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final EquipamentoRepository equipamentoRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public DadosIniciais(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
-                         EquipamentoRepository equipamentoRepository) {
+                         EquipamentoRepository equipamentoRepository, CategoriaRepository categoriaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.equipamentoRepository = equipamentoRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     @Override
@@ -46,6 +50,15 @@ public class DadosIniciais implements CommandLineRunner {
             equipamentoRepository.save(equipamento1);
             equipamentoRepository.save(equipamento2);
             equipamentoRepository.save(equipamento3);
+        }
+
+        if (categoriaRepository.count() == 0) {
+            Categoria categoria1 = new Categoria("Ferramentas Elétricas", "Ferramentas Elétricas");
+            Categoria categoria2 = new Categoria("Equipamentos de Medição", "Equipamentos de Medição");
+            Categoria categoria3 = new Categoria("Equipamentos de Laboratório", "Equipamentos de Laboratório");
+            categoriaRepository.save(categoria1);
+            categoriaRepository.save(categoria2);
+            categoriaRepository.save(categoria3);
         }
     }
 }
