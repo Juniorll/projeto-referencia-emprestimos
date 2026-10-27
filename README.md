@@ -1,10 +1,14 @@
-# Emprest.IO
+# Nome do Sistema
+
+> Substitua o título acima pelo nome do seu sistema e preencha cada seção deste documento.
+> Este README é o **documento de visão** do projeto (entrega **AVA 1**) e, ao longo do curso,
+> também será o manual técnico de como executar o sistema.
 
 | | |
 |---|---|
-| **Aluno(a)** | Nelci Lopes de Lima Junior |
-| **Turma** | TEC-N-001788/2026 |
-| **Opção escolhida** | Controle de Empréstimos |
+| **Aluno(a)** | Seu nome completo |
+| **Turma** | |
+| **Opção escolhida** | Ordens de Serviço · Controle de Estoque · Agendamento de Serviços · Proposta própria |
 | **Versão atual** | 0.1.0 |
 
 ---
@@ -132,4 +136,3 @@ Java 21 · Spring Boot 4 · Spring MVC · Thymeleaf · Bootstrap 5 · Spring Dat
 | Versão | Data | Descrição |
 |---|---|---|
 | 0.1.0 | | Projeto inicial criado a partir do repositório modelo |
-

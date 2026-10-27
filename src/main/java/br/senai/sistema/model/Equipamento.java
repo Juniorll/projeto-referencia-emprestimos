@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +22,7 @@ import jakarta.validation.constraints.Size;
  *
  * Cada objeto desta classe vira UMA LINHA da tabela "equipamentos" no banco.
  * As anotações de validação (@NotBlank, @Size...) definem as regras dos campos do formulário.
+ * Os atributos com @ManyToOne guardam, no banco, só o id do registro relacionado (chave estrangeira).
  */
 @Entity
 @Table(name = "equipamentos")
@@ -52,6 +55,11 @@ public class Equipamento {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate dataAquisicao;
+
+    /** Categoria do equipamento (opcional): relacionamento N:1 (muitos registros daqui apontam para uma Categoria). */
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
     /** Construtor vazio: obrigatório para o JPA e para o formulário criarem objetos. */
     public Equipamento() {
@@ -105,5 +113,13 @@ public class Equipamento {
 
     public void setDataAquisicao(LocalDate dataAquisicao) {
         this.dataAquisicao = dataAquisicao;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

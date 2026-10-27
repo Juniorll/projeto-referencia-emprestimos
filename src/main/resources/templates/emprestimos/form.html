@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Empréstimos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-4">
+    <!-- O mesmo formulário serve para cadastrar (id vazio) e para editar (id preenchido) -->
+    <h1 class="h4 mb-3" th:text="${emprestimo.id == null} ? 'Novo empréstimo' : 'Editar empréstimo'">Novo empréstimo</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <!-- th:object liga o formulário ao objeto "emprestimo"; *{campo} = um atributo desse objeto -->
+            <form th:action="@{/emprestimos/salvar}" th:object="${emprestimo}" method="post" novalidate>
+                <input type="hidden" th:field="*{id}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="equipamento">Equipamento *</label>
+                        <!-- Lista de escolha: cada opção envia o id; o conversor (config/Conversores.java) transforma o id no objeto -->
+                        <select id="equipamento" name="equipamento" class="form-select" th:classappend="${#fields.hasErrors('equipamento')} ? 'is-invalid'">
+                            <option value="">Selecione...</option>
+                            <option th:each="item : ${equipamentos}" th:value="${item.id}" th:text="${item.patrimonio + ' · ' + item.descricao}"
+                                    th:selected="${emprestimo.equipamento != null and emprestimo.equipamento.id == item.id}">Equipamento</option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('equipamento')}" th:errors="*{equipamento}">Erro</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="solicitante">Solicitante *</label>
+                        <input type="text" class="form-control" th:field="*{solicitante}" th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('solicitante')}" th:errors="*{solicitante}">Erro</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="dataRetirada">Retirada *</label>
+                        <input type="date" class="form-control" th:field="*{dataRetirada}" th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dataRetirada')}" th:errors="*{dataRetirada}">Erro</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="dataPrevista">Devolução prevista *</label>
+                        <input type="date" class="form-control" th:field="*{dataPrevista}" th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dataPrevista')}" th:errors="*{dataPrevista}">Erro</div>
+                    </div>
+                </div>
+                <p class="text-muted small mt-3 mb-0">* Campos obrigatórios</p>
+                <div class="mt-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-app"><i class="bi bi-check-lg"></i> Salvar</button>
+                    <a th:href="@{/emprestimos}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

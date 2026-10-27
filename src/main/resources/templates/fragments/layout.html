@@ -19,8 +19,9 @@
 
 <body>
 
-<!-- Fragmento: menu superior -->
-<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-dark bg-app">
+<!-- Fragmento: menu superior + aviso de erro (aparecem juntos em todas as páginas) -->
+<th:block th:fragment="menu">
+<nav class="navbar navbar-expand-lg navbar-dark bg-app">
     <div class="container">
         <a class="navbar-brand fw-semibold" th:href="@{/}">
             <i class="bi bi-grid-3x3-gap-fill me-1"></i>
@@ -33,8 +34,9 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/}">Início</a></li>
                 <!-- Nos próximos encontros, acrescente aqui os links das páginas do seu sistema -->
-                <!-- Já adicionada a linha abaixo -->
                 <li class="nav-item"><a class="nav-link" th:href="@{/equipamentos}">Equipamentos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/categorias}">Categorias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/emprestimos}">Empréstimos</a></li>
             </ul>
             <!-- Aparece somente quando a segurança estiver ligada e houver alguém logado -->
             <div class="d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
@@ -49,6 +51,20 @@
         </div>
     </div>
 </nav>
+<!-- Aviso de erro enviado pelo controller (por exemplo, uma exclusão que o banco recusou) -->
+<div class="container mt-3" th:if="${erro}">
+    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> <span th:text="${erro}">Erro</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+</div>
+</th:block>
+
+<!-- Fragmento: mensagem de sucesso (usado nas listagens, depois de salvar ou excluir) -->
+<div th:fragment="mensagens" th:if="${mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${mensagem}">Mensagem</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+</div>
 
 <!-- Fragmento: rodapé + JavaScript do Bootstrap -->
 <footer th:fragment="rodape" class="border-top mt-5 py-3 text-muted small">
