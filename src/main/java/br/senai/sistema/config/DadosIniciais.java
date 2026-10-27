@@ -12,6 +12,7 @@ import br.senai.sistema.model.Categoria;
 import br.senai.sistema.model.Emprestimo;
 import br.senai.sistema.model.Equipamento;
 import br.senai.sistema.model.Perfil;
+import br.senai.sistema.model.SituacaoEmprestimo;
 import br.senai.sistema.model.Usuario;
 import br.senai.sistema.repository.CategoriaRepository;
 import br.senai.sistema.repository.EmprestimoRepository;
@@ -80,11 +81,20 @@ public class DadosIniciais implements CommandLineRunner {
         if (emprestimoRepository.count() == 0) {
             List<Equipamento> equipamentos = equipamentoRepository.findAll(Sort.by("id"));
             if (!equipamentos.isEmpty()) {
+<<<<<<< HEAD
                 Emprestimo emprestimo1 = new Emprestimo("Prof. Marcos Lima", LocalDate.of(2026, 10, 14), LocalDate.of(2026, 10, 21),
                         equipamentos.get(0));
                 Emprestimo emprestimo2 = new Emprestimo("Ana Souza (Turma DS)", LocalDate.of(2026, 10, 15), LocalDate.of(2026, 10, 17),
                         equipamentos.get(1 % equipamentos.size()));
                 Emprestimo emprestimo3 = new Emprestimo("Laboratório de Eletrônica", LocalDate.of(2026, 10, 16), LocalDate.of(2026, 10, 23),
+=======
+                Emprestimo emprestimo1 = new Emprestimo("Prof. Marcos Lima", LocalDate.of(2026, 10, 14), LocalDate.of(2026, 10, 21), SituacaoEmprestimo.DEVOLVIDO,
+                        equipamentos.get(0));
+                emprestimo1.setDataDevolucao(LocalDate.of(2026, 10, 20));
+                Emprestimo emprestimo2 = new Emprestimo("Ana Souza (Turma DS)", LocalDate.of(2026, 10, 15), LocalDate.of(2026, 10, 17), SituacaoEmprestimo.EMPRESTADO,
+                        equipamentos.get(1 % equipamentos.size()));
+                Emprestimo emprestimo3 = new Emprestimo("Laboratório de Eletrônica", LocalDate.of(2026, 10, 16), LocalDate.of(2026, 10, 23), SituacaoEmprestimo.EMPRESTADO,
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
                         equipamentos.get(2 % equipamentos.size()));
                 emprestimoRepository.save(emprestimo1);
                 emprestimoRepository.save(emprestimo2);

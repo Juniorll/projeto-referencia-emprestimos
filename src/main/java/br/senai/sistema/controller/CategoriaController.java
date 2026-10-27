@@ -1,5 +1,9 @@
 package br.senai.sistema.controller;
 
+<<<<<<< HEAD
+=======
+import org.springframework.dao.DataIntegrityViolationException;
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,11 +67,27 @@ public class CategoriaController {
         return "categorias/form";
     }
 
+<<<<<<< HEAD
     /** POST /categorias/5/excluir -> exclui o registro de id 5. */
     @PostMapping("/{id}/excluir")
     public String excluir(@PathVariable Long id, RedirectAttributes atributos) {
         categoriaService.excluir(id);
         atributos.addFlashAttribute("mensagem", "Categoria excluída com sucesso.");
+=======
+    /**
+     * POST /categorias/5/excluir -> exclui o registro de id 5.
+     * Se houver registros ligados a ele, o banco recusa a exclusão (integridade referencial)
+     * e o sistema mostra um aviso, em vez de uma página de erro.
+     */
+    @PostMapping("/{id}/excluir")
+    public String excluir(@PathVariable Long id, RedirectAttributes atributos) {
+        try {
+            categoriaService.excluir(id);
+            atributos.addFlashAttribute("mensagem", "Categoria excluída com sucesso.");
+        } catch (DataIntegrityViolationException e) {
+            atributos.addFlashAttribute("erro", "Não é possível excluir: existem equipamentos ligados a esta categoria.");
+        }
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
         return "redirect:/categorias";
     }
 }

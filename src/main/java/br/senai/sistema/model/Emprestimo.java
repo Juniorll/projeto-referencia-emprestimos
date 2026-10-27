@@ -6,6 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+<<<<<<< HEAD
+=======
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,6 +56,20 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDate dataPrevista;
 
+<<<<<<< HEAD
+=======
+    /** Data em que o equipamento foi devolvido (vazia enquanto estiver emprestado). */
+    @PastOrPresent(message = "A data não pode ser futura.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Column(nullable = true)
+    private LocalDate dataDevolucao;
+
+    /** Situação (emprestado, devolvido). */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private SituacaoEmprestimo situacao;
+
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
     /** Equipamento emprestado: relacionamento N:1 (muitos registros daqui apontam para um Equipamento). */
     @NotNull(message = "Selecione um equipamento.")
     @ManyToOne
@@ -62,10 +81,18 @@ public class Emprestimo {
     }
 
     /** Construtor com os dados principais: facilita criar objetos no código. */
+<<<<<<< HEAD
     public Emprestimo(String solicitante, LocalDate dataRetirada, LocalDate dataPrevista, Equipamento equipamento) {
         this.solicitante = solicitante;
         this.dataRetirada = dataRetirada;
         this.dataPrevista = dataPrevista;
+=======
+    public Emprestimo(String solicitante, LocalDate dataRetirada, LocalDate dataPrevista, SituacaoEmprestimo situacao, Equipamento equipamento) {
+        this.solicitante = solicitante;
+        this.dataRetirada = dataRetirada;
+        this.dataPrevista = dataPrevista;
+        this.situacao = situacao;
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
         this.equipamento = equipamento;
     }
 
@@ -103,6 +130,25 @@ public class Emprestimo {
         this.dataPrevista = dataPrevista;
     }
 
+<<<<<<< HEAD
+=======
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public SituacaoEmprestimo getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(SituacaoEmprestimo situacao) {
+        this.situacao = situacao;
+    }
+
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
     public Equipamento getEquipamento() {
         return equipamento;
     }
@@ -110,4 +156,8 @@ public class Emprestimo {
     public void setEquipamento(Equipamento equipamento) {
         this.equipamento = equipamento;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Empréstimos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Empréstimos
+            <span class="badge text-bg-secondary align-middle" th:text="${#lists.size(emprestimos)} + ' registro(s)'">0 registro(s)</span>
+        </h1>
+        <a th:href="@{/emprestimos/novo}" class="btn btn-app"><i class="bi bi-plus-lg"></i> Novo empréstimo</a>
+    </div>
+
+    <!-- Mensagem de sucesso: fragmento reaproveitado do layout -->
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <!-- Filtro: envia a escolha como ?situacao=... para o próprio endereço da lista -->
+    <form th:action="@{/emprestimos}" method="get" class="d-flex gap-2 mb-3">
+        <select name="situacao" class="form-select w-auto">
+            <option value="">Todas as situações</option>
+            <option th:each="item : ${situacoes}" th:value="${item}" th:text="${item.descricao}"
+                    th:selected="${item == situacao}">Situação</option>
+        </select>
+        <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-funnel"></i> Filtrar</button>
+    </form>
+
+    <!-- Mensagem quando ainda não há registros -->
+    <div th:if="${#lists.isEmpty(emprestimos)}" class="alert alert-info">Nenhum registro encontrado.</div>
+
+    <div class="card shadow-sm" th:unless="${#lists.isEmpty(emprestimos)}">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>Equipamento</th>
+                    <th>Solicitante</th>
+                    <th>Retirada</th>
+                    <th>Devolução prevista</th>
+                    <th>Devolução</th>
+                    <th>Situação</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- th:each repete a linha <tr> para cada item da lista "emprestimos" -->
+                <tr th:each="emprestimo : ${emprestimos}">
+                    <td th:text="${emprestimo.equipamento.descricao}">Equipamento</td>
+                    <td th:text="${emprestimo.solicitante}">Solicitante</td>
+                    <td th:text="${#temporals.format(emprestimo.dataRetirada, 'dd/MM/yyyy')}">01/01/2026</td>
+                    <td th:text="${#temporals.format(emprestimo.dataPrevista, 'dd/MM/yyyy')}">01/01/2026</td>
+                    <td th:text="${emprestimo.dataDevolucao != null} ? ${#temporals.format(emprestimo.dataDevolucao, 'dd/MM/yyyy')} : '-'">-</td>
+                    <td><span class="badge" th:classappend="'text-bg-' + ${emprestimo.situacao.cor}" th:text="${emprestimo.situacao.descricao}">Situação</span></td>
+                    <td class="text-end text-nowrap">
+                        <a th:href="@{/emprestimos/{id}/editar(id=${emprestimo.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                        <!-- Registrar a devolução: formulário POST -->
+                        <form th:if="${emprestimo.situacao.name() == 'EMPRESTADO'}" th:action="@{/emprestimos/{id}/devolucao(id=${emprestimo.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-box-arrow-in-left"></i> Devolver</button>
+                        </form>
+                        <!-- Excluir usa um formulário POST; o confirm() pede confirmação antes de enviar -->
+                        <form th:action="@{/emprestimos/{id}/excluir(id=${emprestimo.id})}" method="post" class="d-inline"
+                              onsubmit="return confirm('Confirma a exclusão deste registro?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

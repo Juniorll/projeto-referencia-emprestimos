@@ -12,11 +12,8 @@
         <a th:href="@{/categorias/novo}" class="btn btn-app"><i class="bi bi-plus-lg"></i> Nova categoria</a>
     </div>
 
-    <!-- Mensagem de sucesso enviada pelo controller (aparece uma vez, depois de salvar ou excluir) -->
-    <div th:if="${mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${mensagem}">Mensagem</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-    </div>
+    <!-- Mensagem de sucesso: fragmento reaproveitado do layout -->
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
 
     <!-- Mensagem quando ainda não há registros -->
     <div th:if="${#lists.isEmpty(categorias)}" class="alert alert-info">Nenhum registro encontrado.</div>

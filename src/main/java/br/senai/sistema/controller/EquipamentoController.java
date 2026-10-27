@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.senai.sistema.model.Equipamento;
+import br.senai.sistema.service.CategoriaService;
 import br.senai.sistema.service.EquipamentoService;
 import jakarta.validation.Valid;
 
@@ -23,9 +24,12 @@ import jakarta.validation.Valid;
 public class EquipamentoController {
 
     private final EquipamentoService equipamentoService;
+    private final CategoriaService categoriaService;
 
-    public EquipamentoController(EquipamentoService equipamentoService) {
+    public EquipamentoController(EquipamentoService equipamentoService,
+                                  CategoriaService categoriaService) {
         this.equipamentoService = equipamentoService;
+        this.categoriaService = categoriaService;
     }
 
     /** GET /equipamentos -> mostra a lista. */
@@ -39,6 +43,7 @@ public class EquipamentoController {
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("equipamento", new Equipamento());
+        carregarListas(model);
         return "equipamentos/form";
     }
 
@@ -48,8 +53,9 @@ public class EquipamentoController {
      */
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute("equipamento") Equipamento equipamento, BindingResult resultado,
-                         RedirectAttributes atributos) {
+                         Model model, RedirectAttributes atributos) {
         if (resultado.hasErrors()) {
+            carregarListas(model);
             return "equipamentos/form";   // volta para o formulário mostrando os erros
         }
         try {
@@ -57,6 +63,7 @@ public class EquipamentoController {
         } catch (DataIntegrityViolationException e) {
             // O banco recusou: já existe outro registro com o mesmo patrimônio.
             resultado.rejectValue("patrimonio", "duplicado", "Já existe um registro com este patrimônio.");
+            carregarListas(model);
             return "equipamentos/form";
         }
         atributos.addFlashAttribute("mensagem", "Equipamento salvo com sucesso.");
@@ -67,14 +74,28 @@ public class EquipamentoController {
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("equipamento", equipamentoService.buscarPorId(id));
+        carregarListas(model);
         return "equipamentos/form";
     }
 
-    /** POST /equipamentos/5/excluir -> exclui o registro de id 5. */
+    /**
+     * POST /equipamentos/5/excluir -> exclui o registro de id 5.
+     * Se houver registros ligados a ele, o banco recusa a exclusão (integridade referencial)
+     * e o sistema mostra um aviso, em vez de uma página de erro.
+     */
     @PostMapping("/{id}/excluir")
     public String excluir(@PathVariable Long id, RedirectAttributes atributos) {
-        equipamentoService.excluir(id);
-        atributos.addFlashAttribute("mensagem", "Equipamento excluído com sucesso.");
+        try {
+            equipamentoService.excluir(id);
+            atributos.addFlashAttribute("mensagem", "Equipamento excluído com sucesso.");
+        } catch (DataIntegrityViolationException e) {
+            atributos.addFlashAttribute("erro", "Não é possível excluir: existem empréstimos ligados a este equipamento.");
+        }
         return "redirect:/equipamentos";
+    }
+
+    /** Coloca no model as listas usadas nas listas de escolha (select) do formulário. */
+    private void carregarListas(Model model) {
+        model.addAttribute("categorias", categoriaService.listarTodos());
     }
 }
