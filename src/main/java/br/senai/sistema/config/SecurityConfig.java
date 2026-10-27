@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,12 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Configuração de segurança (login e permissões).
  *
- * ESTADO INICIAL: DESLIGADA. Até o Encontro 7 todas as páginas ficam liberadas,
- * para você se concentrar no desenvolvimento das funcionalidades.
- *
- * Para LIGAR a segurança (Encontro 7), altere em application.yml:
- *     app: seguranca: ativa: true
- * e ajuste as regras do bloco "if (ativa)" para as páginas do seu sistema.
+ * LIGADA desde o Encontro 7 (application.yml -> app: seguranca: ativa: true).
+ * Perfis:
+ *   ADMIN    -> pode tudo.
+ *   OPERADOR -> consulta equipamentos e categorias, registra empréstimos e devoluções;
+ *               não cadastra, não edita e não exclui equipamentos e categorias, e não exclui empréstimos.
+ * As regras são conferidas DE CIMA PARA BAIXO: vale a primeira que combinar com o endereço.
  */
 @Configuration
 public class SecurityConfig {
@@ -32,10 +33,15 @@ public class SecurityConfig {
             http.authorizeHttpRequests(auth -> auth
                     // Arquivos públicos e páginas que não exigem login
                     .requestMatchers("/css/**", "/js/**", "/img/**", "/login", "/diagnostico").permitAll()
-                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-                    // Exemplo de página restrita a um perfil (ajuste no Encontro 7)
-                    .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                    // Todo o resto exige estar logado
+                    // Console do banco: só o ADMIN
+                    .requestMatchers(PathRequest.toH2Console()).hasRole("ADMIN")
+                    // Cadastros: todos os perfis consultam a lista...
+                    .requestMatchers(HttpMethod.GET, "/equipamentos", "/categorias").authenticated()
+                    // ...mas só o ADMIN cadastra, edita e exclui
+                    .requestMatchers("/equipamentos/**", "/categorias/**").hasRole("ADMIN")
+                    // Operação principal: o operador registra, mas só o ADMIN exclui
+                    .requestMatchers("/emprestimos/*/excluir").hasRole("ADMIN")
+                    // Todo o resto exige estar logado (qualquer perfil)
                     .anyRequest().authenticated());
         } else {
             // Segurança desligada: tudo liberado

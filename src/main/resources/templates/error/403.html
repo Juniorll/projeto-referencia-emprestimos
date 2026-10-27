@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!--
+    Página de ACESSO NEGADO (erro 403).
+    O Spring Boot mostra automaticamente templates/error/403.html quando o usuário
+    está logado, mas o perfil dele não tem permissão para o endereço pedido.
+-->
+<head th:replace="~{fragments/layout :: head('Acesso negado')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: menu}"></nav>
+
+<main class="container py-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 560px;">
+        <div class="card-body p-4 text-center">
+            <div class="display-6 text-danger mb-2"><i class="bi bi-shield-lock"></i></div>
+            <h1 class="h4">Acesso negado</h1>
+            <p class="text-muted mb-4">O seu perfil não tem permissão para esta página ou ação.</p>
+            <a th:href="@{/}" class="btn btn-app">Voltar ao início</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

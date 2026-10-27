@@ -11,7 +11,7 @@ app:
   nome: "Controle de Empréstimos"
   seguranca:
     # Segurança (login). Fica desligada até o Encontro 7.
-    ativa: false
+    ativa: true
 
 server:
   port: 8080
