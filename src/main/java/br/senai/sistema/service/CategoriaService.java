@@ -41,8 +41,4 @@ public class CategoriaService {
     public void excluir(Long id) {
         categoriaRepository.deleteById(id);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e

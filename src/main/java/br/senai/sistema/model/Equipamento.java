@@ -122,8 +122,4 @@ public class Equipamento {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 383f0626a23a6d0a3155dcf87426ed09ef6d006e
