@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('Empréstimos')}"></head>
 <body>
 <nav th:replace="~{fragments/layout :: menu}"></nav>
@@ -58,7 +58,7 @@
                             <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-box-arrow-in-left"></i> Devolver</button>
                         </form>
                         <!-- Excluir usa um formulário POST; o confirm() pede confirmação antes de enviar -->
-                        <form th:action="@{/emprestimos/{id}/excluir(id=${emprestimo.id})}" method="post" class="d-inline"
+                        <form sec:authorize="hasRole('ADMIN')" th:action="@{/emprestimos/{id}/excluir(id=${emprestimo.id})}" method="post" class="d-inline"
                               onsubmit="return confirm('Confirma a exclusão deste registro?');">
                             <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Excluir</button>
                         </form>
