@@ -1,58 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Início')}"></head>
+<!--
+    PAINEL do sistema (página inicial): os indicadores mais importantes para quem gerencia o negócio.
+    Os dados vêm do InicioController, que chama o PainelService.
+-->
+<head th:replace="~{fragments/layout :: head('Painel')}"></head>
 <body>
 <nav th:replace="~{fragments/layout :: menu}"></nav>
 
 <main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Painel</h1>
+        <span class="text-muted small" th:text="'Atualizado em ' + ${#temporals.format(agora, 'dd/MM/yyyy HH:mm')}">Atualizado em</span>
+    </div>
 
-    <!-- Faixa de status: verde se tudo estiver OK, amarela se algo precisar de atenção -->
-    <div class="status-faixa" th:classappend="${tudoOk} ? 'ok' : 'atencao'">
-        <i class="bi" th:classappend="${tudoOk} ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
-        <div>
-            <strong th:text="${tudoOk} ? 'Ambiente OK' : 'Ambiente com pendências'">Ambiente OK</strong>
-            <span th:text="${tudoOk} ? 'Seu projeto está rodando. Você está pronto para começar!' : 'Confira os itens marcados abaixo e consulte o manual (Problemas comuns).'">
-                Seu projeto está rodando.
-            </span>
+    <!-- Cartões de indicadores: th:each repete o cartão para cada indicador da lista -->
+    <div class="row g-3">
+        <div class="col-sm-6 col-lg-3" th:each="ind : ${indicadores}">
+            <div class="card shadow-sm h-100 border-0 border-start border-4" th:classappend="'border-' + ${ind.cor}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="text-muted small" th:text="${ind.titulo}">Indicador</span>
+                        <i class="bi fs-4" th:classappend="${ind.icone} + ' text-' + ${ind.cor}"></i>
+                    </div>
+                    <div class="fs-3 fw-semibold" th:text="${ind.valor}">0</div>
+                    <div class="small text-muted" th:text="${ind.detalhe}">detalhe</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row g-4 mt-1">
+    <div class="row g-3 mt-1">
+        <!-- Lista de atenção: o que precisa de ação agora -->
         <div class="col-lg-7">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">
-                    <i class="bi bi-clipboard2-pulse me-1"></i> Diagnóstico do ambiente
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-semibold"><i class="bi bi-exclamation-circle me-1"></i> Empréstimos em atraso</div>
+                <div class="card-body" th:if="${#lists.isEmpty(atencao)}">
+                    <p class="text-muted mb-0">Nenhum empréstimo em atraso.</p>
                 </div>
-                <table class="table mb-0 align-middle">
-                    <tbody>
-                    <!-- th:each repete a linha para cada item da lista "itens" -->
-                    <tr th:each="item : ${itens}">
-                        <td class="text-muted" style="width: 42%" th:text="${item.nome}">Item</td>
-                        <td th:text="${item.valor}">Valor</td>
-                        <td class="text-end" style="width: 3rem">
-                            <i th:if="${item.ok}" class="bi bi-check-circle-fill text-success"></i>
-                            <i th:unless="${item.ok}" class="bi bi-x-circle-fill text-danger"></i>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive" th:unless="${#lists.isEmpty(atencao)}">
+                    <table class="table table-sm mb-0 align-middle">
+                        <thead class="table-light">
+                        <tr>
+                        <th>Equipamento</th>
+                        <th>Solicitante</th>
+                        <th>Devolução prevista</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="emprestimo : ${atencao}">
+                        <td th:text="${emprestimo.equipamento.descricao}">Equipamento</td>
+                        <td th:text="${emprestimo.solicitante}">Solicitante</td>
+                        <td class="text-danger fw-semibold" th:text="${#temporals.format(emprestimo.dataPrevista, 'dd/MM/yyyy')}">01/01/2026</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">
+                    <a th:href="@{/emprestimos}" class="small">Ver todos os empréstimos <i class="bi bi-arrow-right"></i></a>
+                </div>
             </div>
         </div>
-
+        <!-- Gráfico (Chart.js): os números vêm do controller -->
         <div class="col-lg-5">
             <div class="card shadow-sm h-100">
-                <div class="card-header bg-white fw-semibold">
-                    <i class="bi bi-signpost-2 me-1"></i> Próximos passos
-                </div>
+                <div class="card-header bg-white fw-semibold"><i class="bi bi-bar-chart me-1"></i> Empréstimos</div>
                 <div class="card-body">
-                    <ol class="mb-3">
-                        <li>Altere o <code>nome</code> do sistema em <code>application.yml</code>.</li>
-                        <li>Atualize o <code>README.md</code> com o seu nome e a opção escolhida.</li>
-                        <li>Faça o <em>commit</em> e envie (<em>push</em>) para o GitHub.</li>
-                    </ol>
-                    <a class="btn btn-outline-secondary btn-sm" th:href="@{/h2-console}" target="_blank">
-                        <i class="bi bi-database"></i> Abrir console do banco (H2)
-                    </a>
+                    <canvas id="grafico" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -60,5 +74,23 @@
 </main>
 
 <footer th:replace="~{fragments/layout :: rodape}"></footer>
+<!-- Biblioteca de gráficos Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<!-- th:inline="javascript": o Thymeleaf escreve as listas do controller dentro do JavaScript -->
+<script th:inline="javascript">
+    const rotulos = /*[[${graficoRotulos}]]*/ [];
+    const valores = /*[[${graficoValores}]]*/ [];
+    new Chart(document.getElementById("grafico"), {
+        type: "bar",
+        data: {
+            labels: rotulos,
+            datasets: [{ label: "Quantidade", data: valores, backgroundColor: "#1f4e79" }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+</script>
 </body>
 </html>
